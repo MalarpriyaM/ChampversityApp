@@ -1,0 +1,54 @@
+@{
+    ViewData["Title"] = "Upload Application";
+}
+
+<div class="container">
+    <h1 class="mb-4">Upload Your Application</h1>
+ 
+    <div class="row">
+   <div class="col-md-8">
+        <div class="card">
+ <div class="card-body">
+  <h5 class="card-title">Upload your completed application form</h5>
+       
+                <form asp-action="UploadApplication" method="post" enctype="multipart/form-data">
+    <div class="mb-3">
+    <p>Please upload your completed Excel application form.</p>
+      </div>
+     
+               <div class="mb-3">
+ <div class="validation-summary-errors text-danger" asp-validation-summary="ModelOnly"></div>
+           </div>
+      
+     <div class="mb-3">
+    <label for="excelFile" class="form-label">Excel Application File</label>
+   <input type="file" class="form-control" id="excelFile" name="excelFile" accept=".xls,.xlsx" required />
+    <div class="form-text">Only Excel files (.xls, .xlsx) are accepted.</div>
+  </div>
+        
+              <div class="mb-3">
+         <button type="submit" class="btn btn-primary">Upload Application</button>
+     <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+  </div>
+     </form>
+           </div>
+  </div>
+     </div>
+    
+      <div class="col-md-4">
+    <div class="card">
+     <div class="card-body">
+      <h5 class="card-title">Need Help?</h5>
+ <p>If you haven't downloaded the application template yet, you can do so here:</p>
+  <a asp-action="DownloadTemplate" class="btn btn-outline-primary">Download Template</a>
+        
+           <hr />
+      
+      <p>Having trouble with your application? Contact our support team:</p>
+    <p><strong>Email:</strong> support@champversity.com</p>
+    <p><strong>Phone:</strong> (123) 456-7890</p>
+  </div>
+            </div>
+  </div>
+    </div>
+</div>

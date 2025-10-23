@@ -1,0 +1,57 @@
+@{
+    ViewData["Title"] = "Application Process";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Champversity Application Process</h1>
+    <p class="lead">Follow these steps to apply to universities through Champversity:</p>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-8 offset-md-2">
+        <div class="card mb-4">
+  <div class="card-body">
+    <h5 class="card-title">Step 1: Download Application Template</h5>
+      <p class="card-text">
+      Download our Excel template and fill in all the required information about yourself and your preferred universities.
+    </p>
+                <a asp-controller="Application" asp-action="DownloadTemplate" class="btn btn-primary">
+      <i class="bi bi-download"></i> Download Template
+          </a>
+            </div>
+        </div>
+      
+    <div class="card mb-4">
+  <div class="card-body">
+    <h5 class="card-title">Step 2: Complete the Application Form</h5>
+            <p class="card-text">
+     Fill out all fields in the Excel template with your personal information and university preferences.
+         </p>
+            </div>
+      </div>
+     
+        <div class="card mb-4">
+ <div class="card-body">
+         <h5 class="card-title">Step 3: Upload Your Completed Application</h5>
+    <p class="card-text">
+    Upload your completed Excel file. Our system will process your application and submit it to your chosen universities.
+          </p>
+      <a asp-controller="Application" asp-action="UploadApplication" class="btn btn-success">
+            <i class="bi bi-upload"></i> Upload Application
+             </a>
+          </div>
+  </div>
+      
+     <div class="card mb-4">
+        <div class="card-body">
+       <h5 class="card-title">Step 4: Check Your Application Status</h5>
+ <p class="card-text">
+           Use your application reference number to check the status of your application.
+     </p>
+     <a asp-controller="Application" asp-action="CheckStatus" class="btn btn-info">
+         <i class="bi bi-search"></i> Check Application Status
+ </a>
+      </div>
+        </div>
+    </div>
+</div>

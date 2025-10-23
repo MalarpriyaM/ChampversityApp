@@ -1,0 +1,45 @@
+@model int
+@{
+  ViewData["Title"] = "Upload Successful";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card text-center">
+       <div class="card-header bg-success text-white">
+        <h1><i class="bi bi-check-circle-fill"></i> Application Submitted</h1>
+          </div>
+    <div class="card-body">
+           <h5 class="card-title">Thank you for submitting your application!</h5>
+         <p class="card-text">Your application has been received and is being processed.</p>
+      
+       <div class="alert alert-info" role="alert">
+     <p><strong>Your Application Reference Number: </strong></p>
+   <h2 class="mb-0">@Model</h2>
+    <p class="mt-2 mb-0">Please save this number for tracking your application status.</p>
+        </div>
+              
+   <p class="card-text mt-4">
+      We will process your application and submit it to your chosen universities. 
+ You can check the status of your application using your reference number.
+        </p>
+           
+     <div class="mt-4">
+     <a asp-action="CheckStatus" asp-route-id="@Model" class="btn btn-primary">Check Status</a>
+  <a asp-action="Index" class="btn btn-secondary">Return to Application Process</a>
+     </div>
+  </div>
+              <div class="card-footer text-muted">
+     Submitted on: @DateTime.Now.ToString("MMMM dd, yyyy, HH:mm tt")
+        </div>
+ </div>
+  
+      <div class="mt-4 text-center">
+        <p><strong>What happens next?</strong></p>
+         <p>Our system will process your application and submit it to your chosen universities. 
+       You will be notified when universities respond with interview slot options.</p>
+      </div>
+  </div>
+    </div>
+</div>
