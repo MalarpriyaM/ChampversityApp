@@ -15,9 +15,13 @@ The Champversity application provides the following functionality:
 
 ## Setup Instructions
 
-1. Run the `setup.bat` file to set up the application
+1. Run the `setup_updated.bat` file to set up the application
 2. Open the solution in Visual Studio
 3. Build and run the application
+
+## Online Repository
+
+This project is hosted on GitHub: https://github.com/MalarpriyaM/ChampversityApp
 
 ## Application Structure
 
@@ -40,3 +44,17 @@ The Champversity application provides the following functionality:
 - NPOI library for Excel processing
 - Background services for batch processing
 - XML processing for university communication
+
+## How to Use
+
+1. Visit the home page
+2. Click on "Start Application" to begin the process
+3. Download the Excel template
+4. Fill out the template with your information
+5. Upload the completed template
+6. Use your application reference number to check status
+7. Select interview slots when they become available
+
+## Contact
+
+For support, please contact support@champversity.com
