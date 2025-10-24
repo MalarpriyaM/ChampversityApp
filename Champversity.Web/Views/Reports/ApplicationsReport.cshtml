@@ -1,0 +1,189 @@
+@model List<Champversity.DataAccess.Models.Student>
+@{
+  ViewData["Title"] = "Applications Report";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid">
+   <div class="row">
+  <div class="col-12">
+     <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>
+       <i class="bi bi-file-earmark-text"></i> Applications Report
+     </h1>
+   <div>
+<a asp-action="Index" class="btn btn-outline-secondary">
+     <i class="bi bi-arrow-left"></i> Back to Reports
+</a>
+      <button class="btn btn-success" onclick="exportToCSV()">
+    <i class="bi bi-download"></i> Export CSV
+    </button>
+ </div>
+    </div>
+ </div>
+    </div>
+
+  <!-- Filter and Search -->
+    <div class="row mb-4">
+      <div class="col-12">
+  <div class="card">
+   <div class="card-header">
+    <h6 class="mb-0">Filters</h6>
+   </div>
+ <div class="card-body">
+      <div class="row">
+        <div class="col-md-3">
+     <label for="statusFilter" class="form-label">Status</label>
+   <select id="statusFilter" class="form-select" onchange="filterTable()">
+  <option value="">All Statuses</option>
+ <option value="Submitted">Submitted</option>
+   <option value="Sent to University">Sent to University</option>
+       <option value="Interview Slots Received">Interview Slots Received</option>
+   <option value="Interview Completed">Interview Completed</option>
+         </select>
+    </div>
+      <div class="col-md-3">
+  <label for="universityFilter" class="form-label">University</label>
+   <select id="universityFilter" class="form-select" onchange="filterTable()">
+    <option value="">All Universities</option>
+     @foreach (var university in Model.Where(s => !string.IsNullOrEmpty(s.University)).Select(s => s.University).Distinct().OrderBy(u => u))
+       {
+     <option value="@university">@university</option>
+      }
+         </select>
+    </div>
+      <div class="col-md-3">
+      <label for="dateFrom" class="form-label">From Date</label>
+     <input type="date" id="dateFrom" class="form-control" onchange="filterTable()" />
+     </div>
+<div class="col-md-3">
+      <label for="dateTo" class="form-label">To Date</label>
+ <input type="date" id="dateTo" class="form-control" onchange="filterTable()" />
+     </div>
+ </div>
+      </div>
+   </div>
+        </div>
+     </div>
+
+    <!-- Applications Table -->
+    <div class="card">
+      <div class="card-header">
+    <h5 class="mb-0">All Applications (@Model.Count)</h5>
+      </div>
+  <div class="card-body">
+  <div class="table-responsive">
+    <table id="applicationsTable" class="table table-striped table-hover">
+       <thead class="table-dark">
+    <tr>
+       <th>ID</th>
+      <th>Student Name</th>
+    <th>Email</th>
+     <th>University</th>
+  <th>Program</th>
+   <th>Status</th>
+   <th>Submitted</th>
+     <th>Actions</th>
+      </tr>
+     </thead>
+    <tbody>
+    @foreach (var student in Model)
+       {
+   <tr>
+ <td>@student.Id</td>
+     <td>@student.FirstName @student.LastName</td>
+   <td>@student.Email</td>
+ <td>@student.University</td>
+  <td>@student.IntendedProgramMajor</td>
+    <td>
+      <span class="badge bg-@(GetStatusClass(student.ApplicationStatus))">
+       @student.ApplicationStatus
+      </span>
+     </td>
+      <td data-date="@student.ApplicationSubmittedDate.ToString("yyyy-MM-dd")">
+     @student.ApplicationSubmittedDate.ToString("MMM dd, yyyy")
+  </td>
+    <td>
+      <a asp-controller="Application" asp-action="CheckStatus" asp-route-id="@student.Id" 
+ class="btn btn-sm btn-outline-primary">View</a>
+       </td>
+   </tr>
+    }
+ </tbody>
+    </table>
+    </div>
+   </div>
+      </div>
+</div>
+
+@functions {
+    string GetStatusClass(string status)
+    {
+   return status switch
+        {
+          "Submitted" => "primary",
+            "Sent to University" => "info",
+        "Interview Slots Received" => "warning",
+         "Interview Completed" => "success",
+       _ => "secondary"
+        };
+    }
+}
+
+<script>
+    function filterTable() {
+        const statusFilter = document.getElementById('statusFilter').value;
+        const universityFilter = document.getElementById('universityFilter').value;
+        const dateFrom = document.getElementById('dateFrom').value;
+  const dateTo = document.getElementById('dateTo').value;
+        
+        const table = document.getElementById('applicationsTable');
+  const rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+        
+      for (let i = 0; i < rows.length; i++) {
+        let show = true;
+      const row = rows[i];
+         
+     // Status filter
+        if (statusFilter && !row.cells[5].textContent.includes(statusFilter)) {
+         show = false;
+   }
+      
+        // University filter
+ if (universityFilter && !row.cells[3].textContent.includes(universityFilter)) {
+        show = false;
+     }
+  
+        // Date filters
+if (dateFrom || dateTo) {
+      const rowDate = row.cells[6].getAttribute('data-date');
+    if (dateFrom && rowDate < dateFrom) show = false;
+      if (dateTo && rowDate > dateTo) show = false;
+      }
+    
+      row.style.display = show ? '' : 'none';
+     }
+    }
+    
+   function exportToCSV() {
+      const table = document.getElementById('applicationsTable');
+    const rows = Array.from(table.querySelectorAll('tr:not([style*="display: none"])'));
+        
+   const csvContent = rows.map(row => {
+  const cells = Array.from(row.querySelectorAll('th, td'));
+    return cells.slice(0, -1).map(cell => 
+        cell.textContent.replace(/,/g, ';').trim()
+       ).join(',');
+      }).join('\n');
+        
+  const blob = new Blob([csvContent], { type: 'text/csv' });
+ const url = window.URL.createObjectURL(blob);
+       const a = document.createElement('a');
+    a.href = url;
+       a.download = `applications_report_${new Date().toISOString().split('T')[0]}.csv`;
+        document.body.appendChild(a);
+ a.click();
+        document.body.removeChild(a);
+   window.URL.revokeObjectURL(url);
+    }
+</script>

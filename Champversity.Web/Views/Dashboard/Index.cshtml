@@ -6,37 +6,44 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-12">
-         <h1 class="mb-4">
-       <i class="bi bi-speedometer2"></i> Dashboard
-      </h1>
-        </div>
+   <div class="col-12">
+     <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>
+ <i class="bi bi-speedometer2"></i> Dashboard
+       </h1>
+     <div>
+      <a asp-controller="Test" asp-action="Index" class="btn btn-warning">
+       <i class="bi bi-flask"></i> Test Mock University
+      </a>
+         </div>
+    </div>
+   </div>
     </div>
 
     <!-- Statistics Cards -->
-   <div class="row mb-4">
-      <div class="col-md-3">
-            <div class="card bg-primary text-white">
-    <div class="card-body">
-  <div class="d-flex justify-content-between">
-       <div>
-  <h4>@Model.TotalApplications</h4>
-          <p class="mb-0">Total Applications</p>
-   </div>
- <div class="align-self-center">
+ <div class="row mb-4">
+    <div class="col-md-3">
+ <div class="card bg-primary text-white">
+         <div class="card-body">
+   <div class="d-flex justify-content-between">
+          <div>
+    <h4>@Model.TotalApplications</h4>
+     <p class="mb-0">Total Applications</p>
+      </div>
+     <div class="align-self-center">
        <i class="bi bi-file-earmark-text fs-1"></i>
       </div>
     </div>
-        </div>
-   </div>
+  </div>
+      </div>
         </div>
     
-  <div class="col-md-3">
-      <div class="card bg-warning text-white">
-     <div class="card-body">
+        <div class="col-md-3">
+            <div class="card bg-warning text-white">
+  <div class="card-body">
       <div class="d-flex justify-content-between">
          <div>
-  <h4>@Model.PendingTasks</h4>
+      <h4>@Model.PendingTasks</h4>
      <p class="mb-0">Pending Tasks</p>
     </div>
      <div class="align-self-center">
@@ -48,15 +55,15 @@
     </div>
         
       <div class="col-md-3">
-         <div class="card bg-info text-white">
+      <div class="card bg-info text-white">
        <div class="card-body">
     <div class="d-flex justify-content-between">
          <div>
     <h4>@Model.InterviewSlotsAvailable</h4>
   <p class="mb-0">Interview Slots</p>
      </div>
-         <div class="align-self-center">
-          <i class="bi bi-calendar-event fs-1"></i>
+       <div class="align-self-center">
+    <i class="bi bi-calendar-event fs-1"></i>
      </div>
      </div>
         </div>
@@ -66,19 +73,64 @@
   <div class="col-md-3">
             <div class="card bg-success text-white">
       <div class="card-body">
-        <div class="d-flex justify-content-between">
+    <div class="d-flex justify-content-between">
      <div>
-          <h4>@Model.UniversityResponsesPending</h4>
-   <p class="mb-0">Responses Pending</p>
+    <h4>@Model.UniversityResponsesPending</h4>
+<p class="mb-0">Responses Pending</p>
     </div>
  <div class="align-self-center">
          <i class="bi bi-envelope fs-1"></i>
-      </div>
-         </div>
+   </div>
+ </div>
    </div>
       </div>
      </div>
  </div>
+
+    <!-- Quick Actions for Testing -->
+    <div class="row mb-4">
+ <div class="col-12">
+  <div class="card border-warning">
+   <div class="card-header bg-warning text-dark">
+          <h5 class="mb-0">
+        <i class="bi bi-lightning"></i> Quick Test Actions
+   </h5>
+    </div>
+         <div class="card-body">
+       <div class="row">
+     <div class="col-md-3">
+    <div class="d-grid">
+  <a asp-controller="Test" asp-action="Index" class="btn btn-outline-warning">
+        <i class="bi bi-flask"></i><br/>Test Mock University
+      </a>
+      </div>
+         </div>
+         <div class="col-md-3">
+     <div class="d-grid">
+      <a asp-controller="Debug" asp-action="StudentStatus" asp-route-studentId="3" class="btn btn-outline-info" target="_blank">
+     <i class="bi bi-info-circle"></i><br/>Check Student #3
+      </a>
+         </div>
+ </div>
+     <div class="col-md-3">
+       <div class="d-grid">
+     <a asp-controller="Application" asp-action="CheckStatus" asp-route-id="3" class="btn btn-outline-primary">
+     <i class="bi bi-search"></i><br/>View Application #3
+      </a>
+    </div>
+      </div>
+      <div class="col-md-3">
+  <div class="d-grid">
+       <a asp-controller="ManualTasks" asp-action="Index" class="btn btn-outline-secondary">
+     <i class="bi bi-list-task"></i><br/>View All Tasks
+     </a>
+    </div>
+         </div>
+     </div>
+         </div>
+     </div>
+      </div>
+    </div>
 
     <!-- Content Cards -->
     <div class="row">
@@ -89,16 +141,16 @@
     <h5 class="mb-0">
        <i class="bi bi-file-earmark-text"></i> Recent Applications
      </h5>
-            </div>
+         </div>
     <div class="card-body">
   @if (Model.RecentApplications.Any())
-          {
+      {
      <div class="table-responsive">
         <table class="table table-striped">
-           <thead>
+      <thead>
   <tr>
    <th>ID</th>
-     <th>Student Name</th>
+  <th>Student Name</th>
     <th>University</th>
  <th>Status</th>
     <th>Submitted</th>
@@ -106,12 +158,12 @@
       </tr>
      </thead>
       <tbody>
-       @foreach (var app in Model.RecentApplications)
+  @foreach (var app in Model.RecentApplications)
   {
-          <tr>
+    <tr>
        <td>@app.Id</td>
   <td>@app.StudentName</td>
-    <td>@app.University</td>
+ <td>@app.University</td>
       <td>
          <span class="badge bg-primary">@app.Status</span>
      </td>
@@ -130,7 +182,7 @@
      {
  <p class="text-muted">No recent applications found.</p>
  }
-      </div>
+    </div>
    </div>
         </div>
         
@@ -149,27 +201,27 @@
       {
       <div class="d-flex justify-content-between align-items-center mb-3 p-2 border rounded">
  <div>
-        <strong>@task.TaskType</strong><br/>
+      <strong>@task.TaskType</strong><br/>
   <small class="text-muted">@task.StudentName</small><br/>
         <small class="text-muted">@task.CreatedDate.ToString("MMM dd, yyyy")</small>
    </div>
          <div>
-        <span class="badge bg-@(task.Priority == "High" ? "danger" : task.Priority == "Medium" ? "warning" : "secondary")">
-     @task.Priority
+    <span class="badge bg-@(task.Priority == "High" ? "danger" : task.Priority == "Medium" ? "warning" : "secondary")">
+   @task.Priority
     </span>
       </div>
      </div>
          }
    
     <div class="text-center mt-3">
-        <a asp-controller="ManualTasks" asp-action="Index" class="btn btn-outline-primary btn-sm">
+      <a asp-controller="ManualTasks" asp-action="Index" class="btn btn-outline-primary btn-sm">
  View All Tasks
       </a>
-      </div>
-       }
+    </div>
+   }
   else
       {
-       <p class="text-muted">No pending tasks.</p>
+     <p class="text-muted">No pending tasks.</p>
        }
        </div>
     </div>

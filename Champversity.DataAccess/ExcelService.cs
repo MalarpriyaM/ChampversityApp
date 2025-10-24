@@ -162,80 +162,108 @@ namespace Champversity.DataAccess
  if (dataRow != null)
  {
  // Personal Information
- student.FirstName = dataRow.GetCell(0)?.StringCellValue;
- student.MiddleName = dataRow.GetCell(1)?.StringCellValue;
- student.LastName = dataRow.GetCell(2)?.StringCellValue;
- student.DateOfBirth = DateTime.TryParse(dataRow.GetCell(3)?.StringCellValue, out var dob) ? dob : DateTime.MinValue;
- student.Gender = dataRow.GetCell(4)?.StringCellValue;
- student.Nationality = dataRow.GetCell(5)?.StringCellValue;
- student.PassportNumber = dataRow.GetCell(6)?.StringCellValue;
- student.PhoneNumber = dataRow.GetCell(7)?.StringCellValue;
- student.Email = dataRow.GetCell(8)?.StringCellValue;
- student.PermanentAddress = dataRow.GetCell(9)?.StringCellValue;
- student.CurrentAddress = dataRow.GetCell(10)?.StringCellValue;
+ student.FirstName = GetCellValueSafely(dataRow, 0);
+ student.MiddleName = GetCellValueSafely(dataRow, 1);
+ student.LastName = GetCellValueSafely(dataRow, 2);
+ student.DateOfBirth = ParseDateSafely(GetCellValueSafely(dataRow, 3));
+ student.Gender = GetCellValueSafely(dataRow, 4);
+ student.Nationality = GetCellValueSafely(dataRow, 5);
+ student.PassportNumber = GetCellValueSafely(dataRow, 6);
+ student.PhoneNumber = GetCellValueSafely(dataRow, 7);
+ student.Email = GetCellValueSafely(dataRow, 8);
+ student.PermanentAddress = GetCellValueSafely(dataRow, 9);
+ student.CurrentAddress = GetCellValueSafely(dataRow, 10);
+ 
  // Academic Background
- student.SchoolAcademicBoard = dataRow.GetCell(11)?.StringCellValue;
- student.SchoolYearOfPass = dataRow.GetCell(12)?.StringCellValue;
- student.SchoolGrade = dataRow.GetCell(13)?.StringCellValue;
- student.HighestQualification = dataRow.GetCell(14)?.StringCellValue;
- student.HighestQualificationYearOfPass = dataRow.GetCell(15)?.StringCellValue;
- student.HighestQualificationGrades = dataRow.GetCell(16)?.StringCellValue;
- student.IELTSScore = dataRow.GetCell(17)?.StringCellValue;
+ student.SchoolAcademicBoard = GetCellValueSafely(dataRow, 11);
+ student.SchoolYearOfPass = GetCellValueSafely(dataRow, 12);
+ student.SchoolGrade = GetCellValueSafely(dataRow, 13);
+ student.HighestQualification = GetCellValueSafely(dataRow, 14);
+ student.HighestQualificationYearOfPass = GetCellValueSafely(dataRow, 15);
+ student.HighestQualificationGrades = GetCellValueSafely(dataRow, 16);
+ student.IELTSScore = GetCellValueSafely(dataRow, 17);
+ 
  // Program Details
- student.University = dataRow.GetCell(18)?.StringCellValue;
- student.UniversityCountry = dataRow.GetCell(19)?.StringCellValue;
- student.UniversityCity = dataRow.GetCell(20)?.StringCellValue;
- student.IntendedProgramMajor = dataRow.GetCell(21)?.StringCellValue;
- student.PreferredStartSemester = dataRow.GetCell(22)?.StringCellValue;
- student.ModeOfStudy = dataRow.GetCell(23)?.StringCellValue;
+ student.University = GetCellValueSafely(dataRow, 18);
+ student.UniversityCountry = GetCellValueSafely(dataRow, 19);
+ student.UniversityCity = GetCellValueSafely(dataRow, 20);
+ student.IntendedProgramMajor = GetCellValueSafely(dataRow, 21);
+ student.PreferredStartSemester = GetCellValueSafely(dataRow, 22);
+ student.ModeOfStudy = GetCellValueSafely(dataRow, 23);
+ 
  // Certifications
  for (int i = 0; i < 3; i++)
  {
- var certName = dataRow.GetCell(24 + i * 3)?.StringCellValue;
- var certYear = dataRow.GetCell(25 + i * 3)?.StringCellValue;
- var certScore = dataRow.GetCell(26 + i * 3)?.StringCellValue;
+ var certName = GetCellValueSafely(dataRow, 24 + i * 3);
+ var certYear = GetCellValueSafely(dataRow, 25 + i * 3);
+ var certScore = GetCellValueSafely(dataRow, 26 + i * 3);
  if (!string.IsNullOrWhiteSpace(certName))
  {
- student.Certifications.Add(new Certification { Name = certName, Year = certYear, Score = certScore });
+ student.Certifications.Add(new Certification 
+ { 
+ Name = certName, 
+ Year = certYear, 
+ Score = certScore,
+ StudentId = 0 // Will be set by EF when saving
+ });
  }
  }
+ 
  // Work Experience
- student.TotalWorkExperience = dataRow.GetCell(33)?.StringCellValue;
- student.LastRole = dataRow.GetCell(34)?.StringCellValue;
- student.Domain = dataRow.GetCell(35)?.StringCellValue;
- student.LastDrawnAnnualSalary = dataRow.GetCell(36)?.StringCellValue;
+ student.TotalWorkExperience = GetCellValueSafely(dataRow, 33);
+ student.LastRole = GetCellValueSafely(dataRow, 34);
+ student.Domain = GetCellValueSafely(dataRow, 35);
+ student.LastDrawnAnnualSalary = GetCellValueSafely(dataRow, 36);
+ 
  // Statement of Purpose
- student.MotivationOfCurrentProgram = dataRow.GetCell(37)?.StringCellValue;
- student.RelevantProgramKnowledge = dataRow.GetCell(38)?.StringCellValue;
+ student.MotivationOfCurrentProgram = GetCellValueSafely(dataRow, 37);
+ student.RelevantProgramKnowledge = GetCellValueSafely(dataRow, 38);
+ 
  // Achievements
  for (int i = 0; i < 3; i++)
  {
- var achName = dataRow.GetCell(39 + i * 3)?.StringCellValue;
- var achYear = dataRow.GetCell(40 + i * 3)?.StringCellValue;
- var achRole = dataRow.GetCell(41 + i * 3)?.StringCellValue;
+ var achName = GetCellValueSafely(dataRow, 39 + i * 3);
+ var achYear = GetCellValueSafely(dataRow, 40 + i * 3);
+ var achRole = GetCellValueSafely(dataRow, 41 + i * 3);
  if (!string.IsNullOrWhiteSpace(achName))
  {
- student.Achievements.Add(new Achievement { Name = achName, Year = achYear, Role = achRole });
+ student.Achievements.Add(new Achievement 
+ { 
+ Name = achName, 
+ Year = achYear, 
+ Role = achRole,
+ StudentId = 0 // Will be set by EF when saving
+ });
  }
  }
+ 
  // Volunteer
  for (int i = 0; i < 3; i++)
  {
- var volName = dataRow.GetCell(48 + i * 3)?.StringCellValue;
- var volYear = dataRow.GetCell(49 + i * 3)?.StringCellValue;
- var volRole = dataRow.GetCell(50 + i * 3)?.StringCellValue;
+ var volName = GetCellValueSafely(dataRow, 48 + i * 3);
+ var volYear = GetCellValueSafely(dataRow, 49 + i * 3);
+ var volRole = GetCellValueSafely(dataRow, 50 + i * 3);
  if (!string.IsNullOrWhiteSpace(volName))
  {
- student.Volunteers.Add(new Volunteer { ProgramName = volName, Year = volYear, ContributionRole = volRole });
+ student.Volunteers.Add(new Volunteer 
+ { 
+ ProgramName = volName, 
+ Year = volYear, 
+ ContributionRole = volRole,
+ StudentId = 0 // Will be set by EF when saving
+ });
  }
  }
+ 
  // Financial
- student.FundingSource = dataRow.GetCell(57)?.StringCellValue;
- student.ScholarshipExpectations = dataRow.GetCell(58)?.StringCellValue;
+ student.FundingSource = GetCellValueSafely(dataRow, 57);
+ student.ScholarshipExpectations = GetCellValueSafely(dataRow, 58);
+ 
  // Visa
- student.VisaStatus = dataRow.GetCell(59)?.StringCellValue;
+ student.VisaStatus = GetCellValueSafely(dataRow, 59);
+ 
  // Payment
- student.PaymentMethod = dataRow.GetCell(60)?.StringCellValue;
+ student.PaymentMethod = GetCellValueSafely(dataRow, 60);
  }
  }
 
@@ -256,6 +284,39 @@ namespace Champversity.DataAccess
  return student;
  }
 
+ private string GetCellValueSafely(IRow row, int cellIndex)
+ {
+ try
+ {
+ var cell = row.GetCell(cellIndex);
+ if (cell == null) return string.Empty;
+ 
+ return cell.CellType switch
+ {
+ CellType.String => cell.StringCellValue ?? string.Empty,
+ CellType.Numeric => cell.NumericCellValue.ToString(),
+ CellType.Boolean => cell.BooleanCellValue.ToString(),
+ CellType.Formula => cell.StringCellValue ?? string.Empty,
+ _ => string.Empty
+ };
+ }
+ catch
+ {
+ return string.Empty;
+ }
+ }
+
+ private DateTime ParseDateSafely(string dateString)
+ {
+ if (string.IsNullOrEmpty(dateString))
+ return DateTime.MinValue;
+ 
+ if (DateTime.TryParse(dateString, out var date))
+ return date;
+ 
+ return DateTime.MinValue;
+ }
+ 
  public async Task<string> GenerateUniversityFile(Student student)
  {
  if (student == null || !student.IsProfileComplete)

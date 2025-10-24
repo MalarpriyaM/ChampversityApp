@@ -1,0 +1,160 @@
+@{
+    ViewData["Title"] = "Test Mock University";
+  Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid">
+<div class="row">
+ <div class="col-12">
+   <div class="d-flex justify-content-between align-items-center mb-4">
+          <h1>
+            <i class="bi bi-flask"></i> Test Mock University System
+ </h1>
+     <div>
+   <a asp-controller="Dashboard" asp-action="Index" class="btn btn-outline-secondary">
+   <i class="bi bi-arrow-left"></i> Back to Dashboard
+</a>
+    </div>
+  </div>
+        </div>
+    </div>
+
+    <div class="row">
+   <div class="col-md-6">
+          <div class="card">
+          <div class="card-header bg-info text-white">
+      <h5 class="mb-0">
+        <i class="bi bi-play-circle"></i> Quick Test Actions
+       </h5>
+           </div>
+             <div class="card-body">
+          <div class="mb-3">
+    <label for="studentId" class="form-label">Student ID</label>
+  <input type="number" class="form-control" id="studentId" value="3" />
+            <div class="form-text">Enter the student application reference number</div>
+          </div>
+        
+           <div class="d-grid gap-2">
+       <button type="button" class="btn btn-success" onclick="triggerMockResponse()">
+    <i class="bi bi-lightning"></i> Trigger Mock University Response
+          </button>
+         
+       <button type="button" class="btn btn-warning" onclick="createSampleData()">
+    <i class="bi bi-database-add"></i> Create Sample Data
+     </button>
+                 
+        <button type="button" class="btn btn-info" onclick="viewStudentStatus()">
+    <i class="bi bi-info-circle"></i> View Student Status
+       </button>
+      </div>
+           </div>
+         </div>
+        </div>
+        
+      <div class="col-md-6">
+            <div class="card">
+     <div class="card-header bg-warning text-dark">
+       <h5 class="mb-0">
+    <i class="bi bi-exclamation-triangle"></i> Test Workflow Steps
+              </h5>
+ </div>
+ <div class="card-body">
+        <ol class="list-group list-group-numbered">
+    <li class="list-group-item">Submit Application (Done for #3)</li>
+        <li class="list-group-item">Trigger Mock University Response</li>
+<li class="list-group-item">Generate Interview Slots</li>
+         <li class="list-group-item">Create Manual Tasks</li>
+                 <li class="list-group-item">Select Interview Slot</li>
+         <li class="list-group-item">Complete Process</li>
+      </ol>
+  </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+     <div class="col-12">
+       <div class="card">
+ <div class="card-header bg-secondary text-white">
+         <h5 class="mb-0">
+             <i class="bi bi-info"></i> Testing Instructions
+          </h5>
+    </div>
+   <div class="card-body">
+         <div class="alert alert-info">
+    <h6><i class="bi bi-lightbulb"></i> How to Test the Complete Workflow:</h6>
+  <ol>
+ <li><strong>Current Status:</strong> Application #3 is submitted</li>
+ <li><strong>Click "Trigger Mock University Response"</strong> to simulate university sending back interview slots</li>
+      <li><strong>Check Application Status</strong> - it should show "Interview Slots Received"</li>
+           <li><strong>Go to Manual Tasks</strong> - you'll see a task to call the student</li>
+   <li><strong>Go to Interview Slots</strong> - you can manage and confirm slots</li>
+</ol>
+   </div>
+      </div>
+   </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function triggerMockResponse() {
+        const studentId = document.getElementById('studentId').value;
+      if (!studentId) {
+            alert('Please enter a Student ID');
+   return;
+ }
+        
+        fetch(`/Admin/Test/TriggerMockResponse/${studentId}`, {
+            method: 'POST',
+            headers: {
+       'Content-Type': 'application/json',
+     'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+        alert('Mock university response triggered successfully!');
+          window.location.reload();
+        } else {
+           alert('Error triggering mock response');
+     }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error triggering mock response');
+        });
+    }
+    
+    function createSampleData() {
+        const studentId = document.getElementById('studentId').value;
+        fetch(`/Admin/Test/CreateSampleData/${studentId}`, {
+     method: 'POST',
+            headers: {
+          'Content-Type': 'application/json',
+        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
+     }
+        })
+        .then(response => {
+    if (response.ok) {
+                alert('Sample data created successfully!');
+            window.location.reload();
+          } else {
+                alert('Error creating sample data');
+     }
+        })
+      .catch(error => {
+      console.error('Error:', error);
+  alert('Error creating sample data');
+    });
+    }
+    
+    function viewStudentStatus() {
+const studentId = document.getElementById('studentId').value;
+        if (!studentId) {
+     alert('Please enter a Student ID');
+            return;
+        }
+        window.open(`/Admin/Debug/StudentStatus/${studentId}`, '_blank');
+    }
+</script>

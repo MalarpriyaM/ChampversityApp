@@ -5,130 +5,136 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Champversity Admin</title>
     <script type="importmap"></script>
-  <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-  <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Champversity.Web.styles.css" asp-append-version="true" />
     <style>
         .admin-sidebar {
-     background-color: #343a40;
-  min-height: calc(100vh - 56px);
-    }
+            background-color: #343a40;
+         min-height: calc(100vh - 56px);
+        }
     .admin-sidebar .nav-link {
-     color: #fff;
-     padding: 0.75rem 1rem;
+    color: #fff;
+ padding: 0.75rem 1rem;
+  }
+     .admin-sidebar .nav-link:hover {
+        background-color: #495057;
+   color: #fff;
         }
-  .admin-sidebar .nav-link:hover {
-    background-color: #495057;
-     color: #fff;
+      .admin-sidebar .nav-link.active {
+            background-color: #007bff;
         }
-        .admin-sidebar .nav-link.active {
-      background-color: #007bff;
-   }
-   .admin-content {
-      padding: 20px;
+        .admin-content {
+            padding: 20px;
         }
     </style>
 </head>
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom">
-         <div class="container-fluid">
-   <a class="navbar-brand" href="#"> <i class="bi bi-gear"></i> Champversity Admin</a>
-         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" 
-    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-     <span class="navbar-toggler-icon"></span>
+    <div class="container-fluid">
+                <a class="navbar-brand" href="#"> <i class="bi bi-gear"></i> Champversity Admin</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" 
+  aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
    </button>
-      <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-      <ul class="navbar-nav flex-grow-1">
- <!-- Left side nav items can go here -->
+          <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+     <ul class="navbar-nav flex-grow-1">
+           <!-- Left side nav items can go here -->
        </ul>
-       <ul class="navbar-nav">
-     <li class="nav-item dropdown">
+             <ul class="navbar-nav">
+           <li class="nav-item dropdown">
      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" 
-     data-bs-toggle="dropdown" aria-expanded="false">
-    <i class="bi bi-person-circle"></i> @User.Identity.Name
-        </a>
-      <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-        <li><a class="dropdown-item" asp-controller="Home" asp-action="Index">
-     <i class="bi bi-house"></i> Public Site</a></li>
-   <li><hr class="dropdown-divider"></li>
-   <li>
-    <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
-  <button type="submit" class="dropdown-item">
-    <i class="bi bi-box-arrow-right"></i> Logout
-      </button>
-     </form>
-   </li>
-      </ul>
-      </li>
-       </ul>
-       </div>
+            data-bs-toggle="dropdown" aria-expanded="false">
+  <i class="bi bi-person-circle"></i> @User.Identity?.Name
+          </a>
+       <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+    <li><a class="dropdown-item" asp-controller="Home" asp-action="Index">
+       <i class="bi bi-house"></i> Public Site</a></li>
+        <li><hr class="dropdown-divider"></li>
+             <li>
+        <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
+<button type="submit" class="dropdown-item">
+         <i class="bi bi-box-arrow-right"></i> Logout
+                </button>
+           </form>
+          </li>
+               </ul>
+            </li>
+   </ul>
+        </div>
      </div>
         </nav>
     </header>
     
- <div class="container-fluid">
+    <div class="container-fluid">
       <div class="row">
-  <!-- Sidebar -->
-   <nav class="col-md-2 d-md-block admin-sidebar">
-    <div class="position-sticky">
-      <ul class="nav flex-column">
-     <li class="nav-item">
-  <a class="nav-link" asp-controller="Dashboard" asp-action="Index">
-      <i class="bi bi-speedometer2"></i> Dashboard
-        </a>
-        </li>
-   <li class="nav-item">
-    <a class="nav-link" asp-controller="Application" asp-action="CheckStatus">
-       <i class="bi bi-file-earmark-text"></i> Applications
-       </a>
-      </li>
-    <li class="nav-item">
-     <a class="nav-link" asp-controller="ManualTasks" asp-action="Index">
-           <i class="bi bi-clipboard-check"></i> Manual Tasks
-   </a>
-        </li>
+            <!-- Sidebar -->
+     <nav class="col-md-2 d-md-block admin-sidebar">
+        <div class="position-sticky">
+       <ul class="nav flex-column">
   <li class="nav-item">
-   <a class="nav-link" asp-controller="InterviewSlots" asp-action="Index">
- <i class="bi bi-calendar-event"></i> Interview Slots
-     </a>
-       </li>
-     <li class="nav-item">
-   <a class="nav-link" href="#" onclick="alert('University Responses feature coming soon!')">
-        <i class="bi bi-envelope"></i> University Responses
-     </a>
-     </li>
-   <li class="nav-item">
-      <a class="nav-link" href="#" onclick="alert('Reports feature coming soon!')">
-   <i class="bi bi-graph-up"></i> Reports
-       </a>
+             <a class="nav-link" asp-controller="Dashboard" asp-action="Index">
+         <i class="bi bi-speedometer2"></i> Dashboard
+  </a>
+    </li>
+  <li class="nav-item">
+    <a class="nav-link" asp-controller="Application" asp-action="CheckStatus">
+          <i class="bi bi-file-earmark-text"></i> Applications
+          </a>
+   </li>
+       <li class="nav-item">
+                <a class="nav-link" asp-controller="ManualTasks" asp-action="Index">
+    <i class="bi bi-clipboard-check"></i> Manual Tasks
+        </a>
+   </li>
+        <li class="nav-item">
+  <a class="nav-link" asp-controller="InterviewSlots" asp-action="Index">
+      <i class="bi bi-calendar-event"></i> Interview Slots
+   </a>
       </li>
-   </ul>
-    </div>
- </nav>
-            
-       <!-- Main content -->
-    <main class="col-md-10 ms-sm-auto admin-content">
-      @if (TempData["SuccessMessage"] != null)
-        {
- <div class="alert alert-success alert-dismissible fade show" role="alert">
-      @TempData["SuccessMessage"]
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+ <li class="nav-item">
+    <a class="nav-link" asp-controller="UniversityResponses" asp-action="Index">
+         <i class="bi bi-envelope"></i> University Responses
+         </a>
+      </li>
+             <li class="nav-item">
+    <a class="nav-link" asp-controller="Reports" asp-action="Index">
+          <i class="bi bi-graph-up"></i> Reports
+            </a>
+    </li>
+     <li class="nav-item mt-3">
+   <hr class="text-white-50">
+   <a class="nav-link text-warning" asp-controller="Test" asp-action="Index">
+              <i class="bi bi-flask"></i> Test Tools
+              </a>
+      </li>
+ </ul>
       </div>
-        }
+   </nav>
+   
+         <!-- Main content -->
+      <main class="col-md-10 ms-sm-auto admin-content">
+   @if (TempData["SuccessMessage"] != null)
+                {
+     <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+         </div>
+     }
   
-      @if (TempData["ErrorMessage"] != null)
-        {
-  <div class="alert alert-danger alert-dismissible fade show" role="alert">
-      @TempData["ErrorMessage"]
+@if (TempData["ErrorMessage"] != null)
+      {
+          <div class="alert alert-danger alert-dismissible fade show" role="alert">
+  @TempData["ErrorMessage"]
  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-     </div>
-        }
+      </div>
+           }
   
-    @RenderBody()
-   </main>
-  </div>
+  @RenderBody()
+        </main>
+     </div>
     </div>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

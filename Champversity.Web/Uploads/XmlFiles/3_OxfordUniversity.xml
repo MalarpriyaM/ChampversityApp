@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<StudentApplication>
+  <StudentID>3</StudentID>
+  <FirstName>John</FirstName>
+  <MiddleName></MiddleName>
+  <LastName>Doe</LastName>
+  <Email>john.doe@example.com</Email>
+  <PhoneNumber>+1234567890</PhoneNumber>
+  <DateOfBirth>01-01-0001</DateOfBirth>
+  <Gender>Male</Gender>
+  <Nationality>Indian</Nationality>
+  <PassportNumber>A1234567</PassportNumber>
+  <PermanentAddress>123 Main St</PermanentAddress>
+  <CurrentAddress>456 College Ave</CurrentAddress>
+  <SchoolAcademicBoard>CBSE</SchoolAcademicBoard>
+  <SchoolYearOfPass>2012</SchoolYearOfPass>
+  <SchoolGrade>A+</SchoolGrade>
+  <HighestQualification>Bachelor's Degree</HighestQualification>
+  <HighestQualificationYearOfPass>2016</HighestQualificationYearOfPass>
+  <HighestQualificationGrades>A</HighestQualificationGrades>
+  <IELTSScore>7.5</IELTSScore>
+  <University>Oxford University</University>
+  <UniversityCountry>UK</UniversityCountry>
+  <UniversityCity>Oxford</UniversityCity>
+  <IntendedProgramMajor>Computer Science</IntendedProgramMajor>
+  <PreferredStartSemester>H1</PreferredStartSemester>
+  <ModeOfStudy>Full-time</ModeOfStudy>
+  <Certifications />
+  <TotalWorkExperience>2 years</TotalWorkExperience>
+  <LastRole>Developer</LastRole>
+  <Domain>IT</Domain>
+  <LastDrawnAnnualSalary>50000</LastDrawnAnnualSalary>
+  <MotivationOfCurrentProgram>To pursue advanced studies</MotivationOfCurrentProgram>
+  <RelevantProgramKnowledge>Expert</RelevantProgramKnowledge>
+  <Achievements />
+  <Volunteers />
+  <FundingSource>Self-funded</FundingSource>
+  <ScholarshipExpectations>No</ScholarshipExpectations>
+  <VisaStatus>Applied</VisaStatus>
+  <PaymentMethod>Credit Card</PaymentMethod>
+  <ApplicationDate>10-24-2025</ApplicationDate>
+  <InterviewSlots />
+</StudentApplication>

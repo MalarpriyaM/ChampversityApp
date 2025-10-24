@@ -1,0 +1,267 @@
+@model Champversity.Web.Controllers.ReportData
+@{
+    ViewData["Title"] = "Reports Dashboard";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+    <h1 class="mb-4">
+       <i class="bi bi-graph-up"></i> Reports Dashboard
+     </h1>
+        </div>
+    </div>
+
+    <!-- Summary Cards -->
+  <div class="row mb-4">
+        <div class="col-md-3">
+      <div class="card bg-primary text-white">
+     <div class="card-body">
+      <div class="d-flex justify-content-between">
+    <div>
+                <h3>@Model.TotalApplications</h3>
+      <p class="mb-0">Total Applications</p>
+                 </div>
+              <div class="align-self-center">
+      <i class="bi bi-file-earmark-text fs-1"></i>
+            </div>
+        </div>
+     </div>
+         </div>
+        </div>
+        
+     <div class="col-md-3">
+            <div class="card bg-success text-white">
+        <div class="card-body">
+      <div class="d-flex justify-content-between">
+ <div>
+     <h3>@Model.ThisMonthApplications</h3>
+  <p class="mb-0">This Month</p>
+            </div>
+      <div class="align-self-center">
+           <i class="bi bi-calendar-month fs-1"></i>
+   </div>
+   </div>
+             </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+      <div class="card bg-info text-white">
+         <div class="card-body">
+       <div class="d-flex justify-content-between">
+    <div>
+        <h3>@Model.UniversityStats.Count</h3>
+          <p class="mb-0">Universities</p>
+        </div>
+       <div class="align-self-center">
+                  <i class="bi bi-building fs-1"></i>
+            </div>
+    </div>
+  </div>
+            </div>
+      </div>
+        
+        <div class="col-md-3">
+   <div class="card bg-warning text-white">
+        <div class="card-body">
+    <div class="d-flex justify-content-between">
+  <div>
+  <h3>@Model.TaskStats.Sum(t => t.Count)</h3>
+         <p class="mb-0">Total Tasks</p>
+ </div>
+                <div class="align-self-center">
+   <i class="bi bi-list-task fs-1"></i>
+</div>
+      </div>
+            </div>
+</div>
+      </div>
+    </div>
+
+    <!-- Quick Report Links -->
+    <div class="row mb-4">
+    <div class="col-12">
+    <div class="card">
+                <div class="card-header">
+      <h5 class="mb-0">
+       <i class="bi bi-menu-button-wide"></i> Report Categories
+         </h5>
+        </div>
+     <div class="card-body">
+        <div class="row">
+         <div class="col-md-3">
+                 <div class="d-grid">
+         <a asp-action="ApplicationsReport" class="btn btn-outline-primary btn-lg">
+         <i class="bi bi-file-earmark-text"></i><br/>
+ Applications Report
+      </a>
+</div>
+             </div>
+ <div class="col-md-3">
+         <div class="d-grid">
+    <a asp-action="UniversitiesReport" class="btn btn-outline-success btn-lg">
+  <i class="bi bi-building"></i><br/>
+           Universities Report
+         </a>
+             </div>
+  </div>
+      <div class="col-md-3">
+       <div class="d-grid">
+       <a asp-action="PerformanceReport" class="btn btn-outline-info btn-lg">
+       <i class="bi bi-speedometer2"></i><br/>
+   Performance Report
+    </a>
+   </div>
+    </div>
+     <div class="col-md-3">
+             <div class="d-grid">
+   <a asp-action="TasksReport" class="btn btn-outline-warning btn-lg">
+   <i class="bi bi-list-task"></i><br/>
+            Tasks Report
+      </a>
+    </div>
+        </div>
+           </div>
+    </div>
+  </div>
+   </div>
+    </div>
+
+    <div class="row">
+  <!-- Application Status Chart -->
+        <div class="col-lg-6">
+            <div class="card">
+      <div class="card-header">
+                <h5 class="mb-0">Application Status Distribution</h5>
+     </div>
+          <div class="card-body">
+        <canvas id="statusChart" width="400" height="200"></canvas>
+            </div>
+   </div>
+        </div>
+     
+        <!-- Top Universities -->
+     <div class="col-lg-6">
+ <div class="card">
+     <div class="card-header">
+          <h5 class="mb-0">Top Universities (by Applications)</h5>
+ </div>
+                <div class="card-body">
+       @if (Model.UniversityStats.Any())
+    {
+     <div class="table-responsive">
+     <table class="table table-sm">
+      <thead>
+       <tr>
+   <th>University</th>
+      <th class="text-end">Applications</th>
+           </tr>
+</thead>
+      <tbody>
+ @foreach (var uni in Model.UniversityStats.Take(5))
+ {
+         <tr>
+  <td>@uni.University</td>
+              <td class="text-end">
+           <span class="badge bg-primary">@uni.Count</span>
+   </td>
+     </tr>
+        }
+             </tbody>
+               </table>
+             </div>
+      }
+       else
+     {
+    <p class="text-muted">No university data available yet.</p>
+            }
+     </div>
+            </div>
+     </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="row mt-4">
+        <div class="col-12">
+  <div class="card">
+      <div class="card-header">
+         <h5 class="mb-0">Recent Application Activity</h5>
+           </div>
+     <div class="card-body">
+     @if (Model.RecentActivity.Any())
+      {
+    <div class="table-responsive">
+            <table class="table table-striped">
+   <thead>
+                <tr>
+          <th>Student ID</th>
+         <th>Student Name</th>
+         <th>University</th>
+           <th>Status</th>
+       <th>Submitted Date</th>
+           </tr>
+    </thead>
+              <tbody>
+            @foreach (var activity in Model.RecentActivity)
+   {
+        <tr>
+          <td>@activity.Id</td>
+          <td>@activity.StudentName</td>
+      <td>@activity.University</td>
+<td>
+ <span class="badge bg-primary">@activity.ApplicationStatus</span>
+          </td>
+              <td>@activity.ApplicationSubmittedDate.ToString("MMM dd, yyyy HH:mm")</td>
+  </tr>
+       }
+     </tbody>
+          </table>
+            </div>
+     }
+ else
+             {
+<p class="text-muted">No recent activity.</p>
+        }
+                </div>
+  </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Status Distribution Chart
+        const ctx = document.getElementById('statusChart').getContext('2d');
+ const statusData = @Html.Raw(Json.Serialize(Model.StatusStats));
+ 
+        if (statusData && statusData.length > 0) {
+            const chart = new Chart(ctx, {
+   type: 'doughnut',
+    data: {
+      labels: statusData.map(s => s.status),
+           datasets: [{
+       data: statusData.map(s => s.count),
+         backgroundColor: [
+        '#007bff', '#28a745', '#ffc107', '#dc3545', '#6f42c1', '#fd7e14'
+     ]
+       }]
+      },
+       options: {
+    responsive: true,
+             maintainAspectRatio: false,
+     plugins: {
+       legend: {
+         position: 'bottom'
+           }
+   }
+      }
+            });
+        } else {
+            document.getElementById('statusChart').style.display = 'none';
+            document.querySelector('#statusChart').parentElement.innerHTML = '<p class="text-muted text-center">No data available for chart.</p>';
+        }
+    </script>
+}
