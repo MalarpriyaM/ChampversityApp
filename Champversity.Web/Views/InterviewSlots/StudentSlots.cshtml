@@ -99,7 +99,7 @@
     }
             </div>
        <div class="col-md-4 text-end">
-            @if (!slot.IsSelected)
+            @if (!slot.IsSelected && student != null)
       {
             <form asp-action="ConfirmSlot" method="post" class="d-inline">
           <input type="hidden" name="slotId" value="@slot.Id" />
@@ -122,7 +122,7 @@
     </div>
       }
        
-    @if (!Model.Any(s => s.IsSelected))
+    @if (!Model.Any(s => s.IsSelected) && student != null)
  {
          <div class="mt-4">
       <div class="alert alert-info">

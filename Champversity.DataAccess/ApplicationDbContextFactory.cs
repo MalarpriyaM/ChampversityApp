@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace Champversity.DataAccess
 {
@@ -18,7 +19,8 @@ namespace Champversity.DataAccess
          if (!File.Exists(Path.Combine(webProjectPath, "appsettings.json")))
   {
            // We might be in the DataAccess project, try to find Web project
-      webProjectPath = Path.Combine(Directory.GetParent(basePath).FullName, "Champversity.Web");
+         var parentDirectory = Directory.GetParent(basePath) ?? throw new InvalidOperationException("Unable to locate the repository root.");
+         webProjectPath = Path.Combine(parentDirectory.FullName, "Champversity.Web");
       }
 
   // Build configuration
@@ -29,13 +31,36 @@ namespace Champversity.DataAccess
 
         // Get connection string
           var connectionString = configuration.GetConnectionString("DefaultConnection") ?? 
-                "Server=(localdb)\\mssqllocaldb;Database=ChampversityDb;Trusted_Connection=True;MultipleActiveResultSets=true";
+            "Server=(localdb)\\mssqllocaldb;Database=ChampversityDb;Trusted_Connection=True;MultipleActiveResultSets=true";
 
        // Create DbContextOptions
             var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
-        optionsBuilder.UseSqlServer(connectionString);
+
+        if (ShouldUseSqlite(connectionString))
+        {
+          var dataDirectory = Path.Combine(webProjectPath, "App_Data");
+          Directory.CreateDirectory(dataDirectory);
+
+          var sqlitePath = Path.Combine(dataDirectory, "Champversity.db");
+          optionsBuilder.UseSqlite($"Data Source={sqlitePath}");
+        }
+        else
+        {
+          optionsBuilder.UseSqlServer(connectionString);
+        }
 
           return new ApplicationDbContext(optionsBuilder.Options);
+        }
+
+        private static bool ShouldUseSqlite(string? connectionString)
+        {
+          if (string.IsNullOrWhiteSpace(connectionString))
+          {
+            return true;
+          }
+
+          return !RuntimeInformation.IsOSPlatform(OSPlatform.Windows) &&
+            connectionString.Contains("(localdb)", StringComparison.OrdinalIgnoreCase);
         }
 }
 }

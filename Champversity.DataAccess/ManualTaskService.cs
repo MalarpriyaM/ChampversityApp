@@ -6,12 +6,12 @@ namespace Champversity.DataAccess
     public interface IManualTaskService
   {
      Task<List<ManualTask>> GetPendingTasksAsync();
-     Task<List<ManualTask>> GetTasksByAssigneeAsync(string assignee);
-        Task<ManualTask> GetTaskByIdAsync(int taskId);
+    Task<List<ManualTask>> GetTasksByAssigneeAsync(string? assignee);
+      Task<ManualTask?> GetTaskByIdAsync(int taskId);
      Task<bool> UpdateTaskStatusAsync(int taskId, string status, string notes);
    Task<bool> CompleteTaskAsync(int taskId, string completionNotes);
  Task<bool> AssignTaskAsync(int taskId, string assignee);
-     Task<ManualTask> CreateTaskAsync(int studentId, string taskType, string description, string priority = "Medium");
+    Task<ManualTask?> CreateTaskAsync(int studentId, string taskType, string description, string priority = "Medium");
     }
 
     public class ManualTaskService : IManualTaskService
@@ -32,8 +32,13 @@ namespace Champversity.DataAccess
     .ToListAsync();
         }
 
- public async Task<List<ManualTask>> GetTasksByAssigneeAsync(string assignee)
+ public async Task<List<ManualTask>> GetTasksByAssigneeAsync(string? assignee)
       {
+    if (string.IsNullOrWhiteSpace(assignee))
+    {
+        return new List<ManualTask>();
+    }
+
     return await _dbContext.ManualTasks
    .Where(t => t.AssignedTo == assignee && (t.Status == "Pending" || t.Status == "InProgress"))
   .OrderByDescending(t => t.Priority == "High" ? 3 : t.Priority == "Medium" ? 2 : 1)
@@ -41,7 +46,7 @@ namespace Champversity.DataAccess
         .ToListAsync();
  }
 
-  public async Task<ManualTask> GetTaskByIdAsync(int taskId)
+  public async Task<ManualTask?> GetTaskByIdAsync(int taskId)
    {
   return await _dbContext.ManualTasks.FindAsync(taskId);
  }
@@ -100,7 +105,7 @@ namespace Champversity.DataAccess
         }
     }
 
-        public async Task<ManualTask> CreateTaskAsync(int studentId, string taskType, string description, string priority = "Medium")
+        public async Task<ManualTask?> CreateTaskAsync(int studentId, string taskType, string description, string priority = "Medium")
         {
      try
       {

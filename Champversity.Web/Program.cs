@@ -2,6 +2,7 @@ using Champversity.DataAccess;
 using Champversity.DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using System.Runtime.InteropServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,10 +11,21 @@ builder.Services.AddControllersWithViews();
 
 // Register DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(
-        builder.Configuration.GetConnectionString("DefaultConnection") ?? "Server=(localdb)\\mssqllocaldb;Database=ChampversityDb;Trusted_Connection=True;"
-    )
-);
+{
+    var configuredConnection = builder.Configuration.GetConnectionString("DefaultConnection");
+
+    if (ShouldUseSqlite(configuredConnection))
+    {
+        var dataDirectory = Path.Combine(builder.Environment.ContentRootPath, "App_Data");
+        Directory.CreateDirectory(dataDirectory);
+
+        var sqlitePath = Path.Combine(dataDirectory, "Champversity.db");
+        options.UseSqlite($"Data Source={sqlitePath}");
+        return;
+    }
+
+    options.UseSqlServer(configuredConnection);
+});
 
 // Add Identity services
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
@@ -96,6 +108,17 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.Run();
+
+static bool ShouldUseSqlite(string? connectionString)
+{
+    if (string.IsNullOrWhiteSpace(connectionString))
+    {
+        return true;
+    }
+
+    return !RuntimeInformation.IsOSPlatform(OSPlatform.Windows) &&
+        connectionString.Contains("(localdb)", StringComparison.OrdinalIgnoreCase);
+}
 
 static async Task SeedDataAsync(ApplicationDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, ValidationService validationService)
 {

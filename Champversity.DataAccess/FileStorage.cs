@@ -20,7 +20,7 @@ Directory.CreateDirectory(_uploadDirectory);
         Directory.CreateDirectory(_templateDirectory);
    }
         
-        public async Task<string> SaveUploadedFileAsync(IFormFile file)
+       public async Task<string?> SaveUploadedFileAsync(IFormFile file)
         {
      if (file == null || file.Length == 0)
           return null;

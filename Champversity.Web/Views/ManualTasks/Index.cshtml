@@ -2,7 +2,7 @@
 @{
     ViewData["Title"] = "Manual Tasks";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
-  var tasksWithStudents = ViewBag.TasksWithStudents as List<object>;
+  var tasksWithStudents = ViewBag.TasksWithStudents as List<object> ?? new List<object>();
 }
 
 <div class="container-fluid">
@@ -46,8 +46,18 @@
      <tbody>
      @foreach (var item in tasksWithStudents)
      {
-   var task = (Champversity.DataAccess.Models.ManualTask)((dynamic)item).Task;
- var student = (Champversity.DataAccess.Models.Student)((dynamic)item).Student;
+   if (item == null)
+   {
+       continue;
+   }
+
+   dynamic row = item;
+   var task = row.Task as Champversity.DataAccess.Models.ManualTask;
+ var student = row.Student as Champversity.DataAccess.Models.Student;
+   if (task == null)
+   {
+       continue;
+   }
      
       <tr>
     <td>@task.Id</td>

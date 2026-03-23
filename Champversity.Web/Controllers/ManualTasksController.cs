@@ -105,7 +105,12 @@ public async Task<IActionResult> Assign(int id, string assignee)
         [Route("MyTasks")]
  public async Task<IActionResult> MyTasks()
     {
-      var currentUser = User.Identity.Name;
+      var currentUser = User.Identity?.Name;
+      if (string.IsNullOrWhiteSpace(currentUser))
+      {
+          return Challenge();
+      }
+
        var tasks = await _manualTaskService.GetTasksByAssigneeAsync(currentUser);
             var tasksWithStudents = new List<object>();
 

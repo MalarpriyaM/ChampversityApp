@@ -319,9 +319,14 @@ namespace Champversity.DataAccess
  
  public async Task<string> GenerateUniversityFile(Student student)
  {
- if (student == null || !student.IsProfileComplete)
+ if (student == null)
  {
- return null;
+ throw new ArgumentNullException(nameof(student));
+ }
+
+ if (!student.IsProfileComplete)
+ {
+ throw new InvalidOperationException("Cannot generate a university file for an incomplete student profile.");
  }
  string universityName = student.University?.Replace(" ", "") ?? "Unknown";
  string filePath = _fileStorage.GetUniversityFilePath(universityName, DateTime.Today);
@@ -341,7 +346,7 @@ namespace Champversity.DataAccess
  {
  if (student == null)
  {
- return null;
+ throw new ArgumentNullException(nameof(student));
  }
  string universityName = student.University?.Replace(" ", "") ?? "Unknown";
  string xmlFilePath = _fileStorage.GetXmlFilePath(student.Id.ToString(), universityName);
@@ -424,13 +429,18 @@ namespace Champversity.DataAccess
  throw new FileNotFoundException("University response file not found.", xmlFilePath);
  }
  XDocument xmlDoc = XDocument.Load(xmlFilePath);
- int studentId = int.Parse(xmlDoc.Root.Element("StudentID").Value);
+ var root = xmlDoc.Root ?? throw new InvalidOperationException("University response XML does not have a root element.");
+ var studentIdValue = root.Element("StudentID")?.Value;
+ if (!int.TryParse(studentIdValue, out var studentId))
+ {
+ throw new InvalidOperationException("University response XML does not contain a valid StudentID.");
+ }
  var student = await _dbContext.Students.FindAsync(studentId);
  if (student == null)
  {
  throw new InvalidOperationException($"Student with ID {studentId} not found.");
  }
- var slotsElement = xmlDoc.Root.Element("InterviewSlots");
+ var slotsElement = root.Element("InterviewSlots");
  if (slotsElement != null && slotsElement.HasElements)
  {
  student.InterviewSlots = new List<InterviewSlot>();
